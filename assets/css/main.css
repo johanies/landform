@@ -1,0 +1,163 @@
+@charset "UTF-8";
+@import url("../css/fonts.css");
+/* Základní reset / normalizace pro jednoduchý statický web */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  font-size: 20px;
+}
+@media (min-width: 600px) {
+  html {
+    font-size: 22px;
+  }
+}
+@media (min-width: 900px) {
+  html {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1200px) {
+  html {
+    font-size: 28px;
+  }
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Option_Land", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.page {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+body.night {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+}
+
+.option {
+  font-family: "Option_Land", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.option-dark, .top {
+  font-family: "Option_Land Darkk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.top__title,
+.top__countdown {
+  font-size: 0.9rem;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-layer--base {
+  z-index: 1;
+}
+
+.content-layer--dark {
+  z-index: 2;
+  clip-path: circle(var(--reveal-radius, 0px) at var(--reveal-x, -9999px) var(--reveal-y, -9999px));
+}
+
+.content p + p {
+  margin-top: 1rem;
+}
+
+@media (min-width: 900px) {
+  .page {
+    max-width: 900px;
+    padding: 0;
+  }
+}
+.mode-toggle {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 1.2rem;
+  height: 0.6rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background-color: var(--text-color);
+  cursor: pointer;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.mode-toggle::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background-color: var(--bg-color);
+  transform: translateX(0.1rem);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+body.night .mode-toggle::before {
+  transform: translateX(0.6rem);
+}
+
+.reveal-circle {
+  position: fixed;
+  z-index: 3;
+  top: var(--reveal-y, -9999px);
+  left: var(--reveal-x, -9999px);
+  width: calc(var(--reveal-radius, 80px) * 2);
+  height: calc(var(--reveal-radius, 80px) * 2);
+  margin: 0;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+body.night .reveal-circle {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/*# sourceMappingURL=main.css.map */
