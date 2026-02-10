@@ -47,12 +47,19 @@ function initTextReveal() {
     };
 
     if (isCoarsePointer) {
-        // Touch zařízení – autonomní „screensaver“ pohyb (ještě rychlejší)
+        // Touch zařízení – autonomní „screensaver“ pohyb
         let x = window.innerWidth / 2;
         let y = window.innerHeight / 2;
-        let vx = 4;
-        let vy = 3;
-        const radius = defaultRadius;
+
+        // na mobilech menší kruh, aby nepůsobil tak masivně
+        const radius = window.innerWidth < 600 ? 90 : defaultRadius;
+        root.style.setProperty('--reveal-radius', radius + 'px');
+
+        // směr trochu náhodný, ať to neběží „učebnicově“ po diagonále
+        const speed = 4;
+        const angle = Math.random() * Math.PI * 2;
+        let vx = Math.cos(angle) * speed;
+        let vy = Math.sin(angle) * speed;
 
         const tick = () => {
             const maxX = window.innerWidth - radius;
