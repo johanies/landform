@@ -27,9 +27,6 @@ function initTextReveal() {
     const darkLayer = document.querySelector('.content-layer--dark');
     if (!circle || !darkLayer) return;
 
-    const body = document.body;
-    const isVariantNegative = body.classList.contains('variant-negative');
-
     const defaultRadius = 140;
     root.style.setProperty('--reveal-radius', defaultRadius + 'px');
 
@@ -51,19 +48,10 @@ function initTextReveal() {
 
     if (isCoarsePointer) {
         // Touch zařízení – autonomní „screensaver“ pohyb
-        let x;
-        let y;
-
-        // u negativní varianty startujeme ze středu tmavé vrstvy,
-        // aby se pohyb držel víc nad textem
-        if (isVariantNegative) {
-            const rect = darkLayer.getBoundingClientRect();
-            x = rect.left + rect.width / 2;
-            y = rect.top + rect.height / 2;
-        } else {
-            x = window.innerWidth / 2;
-            y = window.innerHeight / 2;
-        }
+        // startujeme ze středu tmavé vrstvy, aby se pohyb držel víc nad textem
+        const rect = darkLayer.getBoundingClientRect();
+        let x = rect.left + rect.width / 2;
+        let y = rect.top + rect.height / 2;
 
         // na mobilech menší kruh, aby nepůsobil tak masivně
         const radius = window.innerWidth < 600 ? 90 : defaultRadius;
@@ -76,20 +64,13 @@ function initTextReveal() {
         let vy = Math.sin(angle) * speed;
 
         const tick = () => {
-            let minX = radius;
-            let maxX = window.innerWidth - radius;
-            let minY = radius;
-            let maxY = window.innerHeight - radius;
-
-            // pro negativní variantu omezíme pohyb kruhu na oblast tmavé vrstvy,
+            // omezíme pohyb kruhu na oblast tmavé vrstvy,
             // aby se neusekával o její okraj
-            if (isVariantNegative) {
-                const rect = darkLayer.getBoundingClientRect();
-                minX = rect.left + radius;
-                maxX = rect.right - radius;
-                minY = rect.top + radius;
-                maxY = rect.bottom - radius;
-            }
+            const rect = darkLayer.getBoundingClientRect();
+            const minX = rect.left + radius;
+            const maxX = rect.right - radius;
+            const minY = rect.top + radius;
+            const maxY = rect.bottom - radius;
 
             x += vx;
             y += vy;

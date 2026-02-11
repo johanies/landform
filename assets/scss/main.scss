@@ -103,21 +103,14 @@ body.night {
     margin-top: 1rem;
 }
 
-@media (min-width: 900px) {
-    .page {
-        max-width: 900px;
-        padding: 0;
-    }
-}
-
-/* Varianta 2: vlastní „sloupek“ pouze pro negativní verzi,
-   aby layout textu zůstal stejný, ale tmavá vrstva měla víc prostoru. */
-body.variant-negative .page {
+/* Page má plnou šířku, aby tmavá vrstva měla prostor pro kruh */
+.page {
     max-width: none;
     padding: 0;
 }
 
-body.variant-negative .content-inner {
+/* Text je v content-inner, který má stejný layout jako původní max-width */
+.content-inner {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
@@ -181,11 +174,10 @@ body.night .reveal-circle {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Varianta 2: Negativní verze
+/* Negativní verze (defaultní)
    - denní režim: v kruhu bílé písmo na černém pozadí
-   - noční režim: v kruhu černé písmo na bílém pozadí
-   Layout textu zůstává stejný jako u původní varianty, pouze se mění barvy. */
-body.variant-negative .content-layer--dark {
+   - noční režim: v kruhu černé písmo na bílém pozadí */
+.content-layer--dark {
     background-color: #000000;
     color: #ffffff;
 
@@ -194,7 +186,7 @@ body.variant-negative .content-layer--dark {
     }
 }
 
-body.variant-negative.night .content-layer--dark {
+body.night .content-layer--dark {
     background-color: #ffffff;
     color: #000000;
 
@@ -203,18 +195,7 @@ body.variant-negative.night .content-layer--dark {
     }
 }
 
-body.variant-negative .reveal-circle,
-body.variant-negative.night .reveal-circle {
+.reveal-circle {
     background-color: transparent;
     border: none;
-}
-
-/* Varianta 3: Kruh jen s jemným borderem místo pozadí */
-body.variant-border .reveal-circle {
-    background-color: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-body.variant-border.night .reveal-circle {
-    border-color: rgba(255, 255, 255, 0.4);
 }
