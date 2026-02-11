@@ -192,9 +192,32 @@ function initCountdown() {
     setInterval(tick, 1000);
 }
 
+function fixPrepositions() {
+    // Seznam jednoznakových předložek v češtině
+    const prepositions = ['v', 's', 'k', 'z', 'o', 'u', 'i', 'a'];
+    
+    // Najdeme všechny odstavce s textem
+    const paragraphs = document.querySelectorAll('.content-text p');
+    
+    paragraphs.forEach(p => {
+        let html = p.innerHTML;
+        
+        // Pro každou předložku nahradíme mezeru za nezlomitelnou mezeru
+        prepositions.forEach(prep => {
+            // Regex najde předložku následovanou mezerou a slovem
+            // Použijeme word boundary, aby se to netýkalo částí slov
+            const regex = new RegExp(`\\b${prep}\\s+`, 'gi');
+            html = html.replace(regex, `${prep}\u00A0`); // \u00A0 je nezlomitelná mezera
+        });
+        
+        p.innerHTML = html;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initModeToggle();
     initCountdown();
     initTextReveal();
+    fixPrepositions();
 });
 
