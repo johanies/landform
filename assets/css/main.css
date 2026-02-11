@@ -110,6 +110,25 @@ body.night {
     padding: 0;
   }
 }
+/* Varianta 2: vlastní „sloupek“ pouze pro negativní verzi,
+   aby layout textu zůstal stejný, ale tmavá vrstva měla víc prostoru. */
+body.variant-negative .page {
+  max-width: none;
+  padding: 0;
+}
+
+body.variant-negative .content-inner {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+@media (min-width: 900px) {
+  body.variant-negative .content-inner {
+    padding: 0;
+  }
+}
+
 .mode-toggle {
   position: fixed;
   right: 0.5rem;
