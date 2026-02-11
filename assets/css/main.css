@@ -163,16 +163,8 @@ body.night .reveal-circle {
 /* Varianta 2: Negativní verze
    - denní režim: v kruhu bílé písmo na černém pozadí
    - noční režim: v kruhu černé písmo na bílém pozadí
-   Kruh nemá žádné vlastní poloprůhledné pozadí – je vidět jen samotný obsah. */
+   Layout textu zůstává stejný jako u původní varianty, pouze se mění barvy. */
 body.variant-negative .content-layer--dark {
-  /* Pro variantu 2 pokrývá celý viewport, aby kruh mohl vyjet mimo text bez ořezu */
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
   background-color: #000000;
   color: #ffffff;
 }

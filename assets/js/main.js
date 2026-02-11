@@ -27,6 +27,9 @@ function initTextReveal() {
     const darkLayer = document.querySelector('.content-layer--dark');
     if (!circle || !darkLayer) return;
 
+    const body = document.body;
+    const isVariantNegative = body.classList.contains('variant-negative');
+
     const defaultRadius = 140;
     root.style.setProperty('--reveal-radius', defaultRadius + 'px');
 
@@ -48,8 +51,19 @@ function initTextReveal() {
 
     if (isCoarsePointer) {
         // Touch zařízení – autonomní „screensaver“ pohyb
-        let x = window.innerWidth / 2;
-        let y = window.innerHeight / 2;
+        let x;
+        let y;
+
+        // u negativní varianty startujeme ze středu tmavé vrstvy,
+        // aby se pohyb držel víc nad textem
+        if (isVariantNegative) {
+            const rect = darkLayer.getBoundingClientRect();
+            x = rect.left + rect.width / 2;
+            y = rect.top + rect.height / 2;
+        } else {
+            x = window.innerWidth / 2;
+            y = window.innerHeight / 2;
+        }
 
         // na mobilech menší kruh, aby nepůsobil tak masivně
         const radius = window.innerWidth < 600 ? 90 : defaultRadius;
@@ -62,10 +76,20 @@ function initTextReveal() {
         let vy = Math.sin(angle) * speed;
 
         const tick = () => {
-            const maxX = window.innerWidth - radius;
-            const minX = radius;
-            const maxY = window.innerHeight - radius;
-            const minY = radius;
+            let minX = radius;
+            let maxX = window.innerWidth - radius;
+            let minY = radius;
+            let maxY = window.innerHeight - radius;
+
+            // pro negativní variantu omezíme pohyb kruhu na oblast tmavé vrstvy,
+            // aby se neusekával o její okraj
+            if (isVariantNegative) {
+                const rect = darkLayer.getBoundingClientRect();
+                minX = rect.left + radius;
+                maxX = rect.right - radius;
+                minY = rect.top + radius;
+                maxY = rect.bottom - radius;
+            }
 
             x += vx;
             y += vy;
