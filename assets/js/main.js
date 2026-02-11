@@ -13,49 +13,68 @@ function toggleNightMode() {
 }
 
 function initModeToggle() {
-    const button = document.querySelector('.mode-toggle');
-    if (!button) return;
+    const buttons = document.querySelectorAll('.mode-toggle');
+    if (!buttons.length) return;
 
-    button.addEventListener('click', () => {
-        toggleNightMode();
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            toggleNightMode();
+        });
     });
 }
 
 function initTextReveal() {
     const root = document.documentElement;
-    const circle = document.querySelector('.reveal-circle');
     const darkLayer = document.querySelector('.content-layer--dark');
-    if (!circle || !darkLayer) return;
+    const shapePath = document.querySelector('#revealShapePath');
+    if (!darkLayer || !shapePath) return;
 
     const defaultRadius = 140;
+    
+    // Získáme skutečný bounding box path pro výpočet středu
+    const bbox = shapePath.getBBox();
+    const svgCenterX = bbox.x + bbox.width / 2;
+    const svgCenterY = bbox.y + bbox.height / 2;
+    const svgDiameter = Math.max(bbox.width, bbox.height);
+    
     root.style.setProperty('--reveal-radius', defaultRadius + 'px');
 
     const isCoarsePointer = window.matchMedia &&
         window.matchMedia('(pointer: coarse)').matches;
 
     const updateAtPosition = (x, y) => {
-        // pozice kruhu (fixed, v souřadnicích viewportu)
-        root.style.setProperty('--reveal-x', x + 'px');
-        root.style.setProperty('--reveal-y', y + 'px');
-
-        // pozice clip-path vzhledem k textové vrstvě
-        const rect = darkLayer.getBoundingClientRect();
-        const localX = x - rect.left;
-        const localY = y - rect.top;
-        darkLayer.style.setProperty('--reveal-x', localX + 'px');
-        darkLayer.style.setProperty('--reveal-y', localY + 'px');
+        // pozice tvaru (fixed, v souřadnicích viewportu)
+        // kurzor je ve středu tvaru, stejně jako u kruhu
+        const radius = parseFloat(getComputedStyle(root).getPropertyValue('--reveal-radius')) || defaultRadius;
+        const size = radius * 2; // průměr
+        
+        // Scale podle velikosti - chceme aby měl stejnou velikost jako kruh
+        const scale = size / svgDiameter;
+        
+        // Transformujeme tak, aby střed SVG byl na pozici kurzoru
+        // V SVG se transformace aplikují zprava doleva: translate(x, y) scale(s) = nejprve scale, pak translate
+        // Po škálování je střed na (svgCenterX * scale, svgCenterY * scale)
+        // Chceme ho posunout na (x, y), takže translate = (x - svgCenterX*scale, y - svgCenterY*scale)
+        const translateX = x - svgCenterX * scale;
+        const translateY = y - svgCenterY * scale;
+        
+        shapePath.setAttribute('transform', `translate(${translateX},${translateY}) scale(${scale})`);
     };
+
+    // Inicializace na střed obrazovky
+    const initialX = window.innerWidth / 2;
+    const initialY = window.innerHeight / 2;
+    updateAtPosition(initialX, initialY);
 
     if (isCoarsePointer) {
         // Touch zařízení – autonomní „screensaver“ pohyb
-        // startujeme ze středu tmavé vrstvy, aby se pohyb držel víc nad textem
-        const rect = darkLayer.getBoundingClientRect();
-        let x = rect.left + rect.width / 2;
-        let y = rect.top + rect.height / 2;
+        let x = initialX;
+        let y = initialY;
 
-        // na mobilech menší kruh, aby nepůsobil tak masivně
+        // na mobilech menší tvar, aby nepůsobil tak masivně
         const radius = window.innerWidth < 600 ? 90 : defaultRadius;
         root.style.setProperty('--reveal-radius', radius + 'px');
+        updateAtPosition(x, y); // aktualizuj s novým radius
 
         // směr trochu náhodný, ať to neběží „učebnicově“ po diagonále
         const speed = 4;
@@ -64,13 +83,10 @@ function initTextReveal() {
         let vy = Math.sin(angle) * speed;
 
         const tick = () => {
-            // omezíme pohyb kruhu na oblast tmavé vrstvy,
-            // aby se neusekával o její okraj
-            const rect = darkLayer.getBoundingClientRect();
-            const minX = rect.left + radius;
-            const maxX = rect.right - radius;
-            const minY = rect.top + radius;
-            const maxY = rect.bottom - radius;
+            const maxX = window.innerWidth - radius;
+            const minX = radius;
+            const maxY = window.innerHeight - radius;
+            const minY = radius;
 
             x += vx;
             y += vy;
@@ -139,8 +155,8 @@ function formatTimeLeft(ms) {
 }
 
 function initCountdown() {
-    const label = document.querySelector('.top__countdown');
-    if (!label) return;
+    const labels = document.querySelectorAll('.top__countdown');
+    if (!labels.length) return;
 
     let { inDayNow, nextTarget } = getStateAndTarget();
 
@@ -166,7 +182,10 @@ function initCountdown() {
             nextTarget = state.nextTarget;
         }
 
-        label.textContent = formatTimeLeft(diff);
+        const timeStr = formatTimeLeft(diff);
+        labels.forEach(label => {
+            label.textContent = timeStr;
+        });
     };
 
     tick();

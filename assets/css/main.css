@@ -52,11 +52,11 @@ body.night {
   font-family: "Option_Land", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.option-dark, .top {
+.option-dark {
   font-family: "Option_Land Darkk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.top {
+.content-layer .top {
   position: fixed;
   top: 0;
   left: 0;
@@ -65,6 +65,7 @@ body.night {
   justify-content: space-between;
   padding: 0.5rem;
   width: 100%;
+  z-index: 10;
 }
 
 .top__title,
@@ -72,23 +73,12 @@ body.night {
   font-size: 0.9rem;
 }
 
-.content {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  margin: 0 auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .content-layer {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
 }
 
 .content-layer--base {
@@ -97,33 +87,49 @@ body.night {
 
 .content-layer--dark {
   z-index: 2;
-  clip-path: circle(var(--reveal-radius, 0px) at var(--reveal-x, -9999px) var(--reveal-y, -9999px));
+  clip-path: url(#revealShape);
+  background-color: #000000;
+  color: #ffffff;
+}
+.content-layer--dark .top__title,
+.content-layer--dark .top__countdown,
+.content-layer--dark .content-text,
+.content-layer--dark .content-text p {
+  color: #ffffff;
 }
 
-.content p + p {
+body.night .content-layer--dark {
+  background-color: #ffffff;
+  color: #000000;
+}
+body.night .content-layer--dark .top__title,
+body.night .content-layer--dark .top__countdown,
+body.night .content-layer--dark .content-text,
+body.night .content-layer--dark .content-text p {
+  color: #000000;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content-text p + p {
   margin-top: 1rem;
 }
 
-/* Page má plnou šířku, aby tmavá vrstva měla prostor pro kruh */
-.page {
-  max-width: none;
-  padding: 0;
-}
-
-/* Text je v content-inner, který má stejný layout jako původní max-width */
-.content-inner {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 0.5rem;
-}
 @media (min-width: 900px) {
-  .content-inner {
+  .page {
+    max-width: 900px;
     padding: 0;
   }
 }
-
-.mode-toggle {
+.content-layer .mode-toggle {
   position: fixed;
   right: 0.5rem;
   bottom: 0.5rem;
@@ -139,8 +145,9 @@ body.night {
   align-items: center;
   justify-content: flex-start;
   transition: background-color 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
 }
-.mode-toggle::before {
+.content-layer .mode-toggle::before {
   content: "";
   width: 0.4rem;
   height: 0.4rem;
@@ -150,8 +157,28 @@ body.night {
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-body.night .mode-toggle::before {
+.content-layer--dark .mode-toggle {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+.content-layer--dark .mode-toggle::before {
+  background-color: #000000;
+}
+
+body.night .content-layer--dark .mode-toggle {
+  background-color: #000000;
+  border-color: #000000;
+}
+body.night .content-layer--dark .mode-toggle::before {
+  background-color: #ffffff;
+}
+
+body.night .content-layer--base .mode-toggle::before {
   transform: translateX(0.6rem);
+}
+
+body.night .content-layer--dark .mode-toggle::before {
+  transform: translateX(0.1rem);
 }
 
 .reveal-circle {
@@ -164,37 +191,9 @@ body.night .mode-toggle::before {
   margin: 0;
   border-radius: 50%;
   border: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
-}
-
-body.night .reveal-circle {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Negativní verze (defaultní)
-   - denní režim: v kruhu bílé písmo na černém pozadí
-   - noční režim: v kruhu černé písmo na bílém pozadí */
-.content-layer--dark {
-  background-color: #000000;
-  color: #ffffff;
-}
-.content-layer--dark p {
-  color: #ffffff;
-}
-
-body.night .content-layer--dark {
-  background-color: #ffffff;
-  color: #000000;
-}
-body.night .content-layer--dark p {
-  color: #000000;
-}
-
-.reveal-circle {
-  background-color: transparent;
-  border: none;
 }
 
 /*# sourceMappingURL=main.css.map */
