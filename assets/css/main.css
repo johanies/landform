@@ -88,7 +88,10 @@ body.night {
 .content-layer--dark {
   z-index: 2;
   clip-path: url(#revealShape);
-  background-color: #000000;
+  background-image: url("../images/krajina.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: #ffffff;
 }
 .content-layer--dark .top__title,
@@ -99,7 +102,6 @@ body.night {
 }
 
 body.night .content-layer--dark {
-  background-color: #ffffff;
   color: #000000;
 }
 body.night .content-layer--dark .top__title,
