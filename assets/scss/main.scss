@@ -162,3 +162,24 @@ body.night .mode-toggle {
 body.night .reveal-circle {
     background-color: rgba(255, 255, 255, 0.3);
 }
+
+/* Varianta 2: Negativní verze - v kruhu je bílý text na černém pozadí */
+body.variant-negative .content-layer--dark {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+body.variant-negative.night .content-layer--dark {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Varianta 3: Kruh jen s jemným borderem místo pozadí */
+body.variant-border .reveal-circle {
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+body.variant-border.night .reveal-circle {
+    border-color: rgba(255, 255, 255, 0.4);
+}
